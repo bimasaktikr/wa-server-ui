@@ -4,6 +4,10 @@ deployment:
     - export DEPLOYPATH=/home/bpskotam/wpp.bpskotamalang.id
     - /bin/cp -R . $DEPLOYPATH # Copies all project files
     - cd $DEPLOYPATH
+
+    #✅ Check if .env exists; if not, decrypt it (adjust the decryption command below as needed)
+    - if [ ! -f ".env" ]; then echo "🔐 Decrypting .env using Laravel..."; php artisan env:decrypt --key=$(cat .key); fi
+
     - composer install --no-dev --optimize-autoloader # Installs PHP dependencies
     - php artisan migrate --force # Runs database migrations
     - php artisan config:cache # Caches configuration
