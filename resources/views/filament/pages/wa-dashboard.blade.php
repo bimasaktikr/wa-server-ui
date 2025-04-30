@@ -1,4 +1,16 @@
 <x-filament::page>
+    {{-- @if ($qrCode)
+        <x-filament::modal id="qr-modal" :visible="true">
+            <x-slot name="header">Scan QR</x-slot>
+            <x-slot name="content">
+                <div class="flex items-center justify-center p-4">
+                    <img src="https://api.qrserver.com/v1/create-qr-code/?size=250x250&data={{ urlencode($qrCode) }}" alt="QR Code">
+                </div>
+            </x-slot>
+        </x-filament::modal>
+    @endif --}}
+
+
     <div class="space-y-4">
         <x-filament::card>
             <div class="flex items-center justify-between">
@@ -28,25 +40,14 @@
                     @endif
                 </div>
 
-                @if ($status === 'SCAN_QR')
+                @if ($status === 'SCAN_QR' && $qrCode)
                     <div class="mt-4">
                         <h3 class="text-lg font-semibold">Silakan Scan QR</h3>
-
-                        @php
-                            $qrResponse = Http::get('http://localhost:3000/qr');
-                            $qrData = $qrResponse->successful() ? $qrResponse->json() : null;
-                        @endphp
-
-                        @if ($qrData && isset($qrData['qr']))
-                            {{-- Google Chart API untuk QR Code --}}
-                            <img
-                                src="https://api.qrserver.com/v1/create-qr-code/?data={{ urlencode($qrData['qr']) }}&size=200x200"
-                                alt="QR Code"
-                                class="mt-2 border rounded"
-                            >
-                        @else
-                            <p class="text-red-600">QR Code tidak tersedia.</p>
-                        @endif
+                        <img
+                            src="https://api.qrserver.com/v1/create-qr-code/?data={{ urlencode($qrCode) }}&size=200x200"
+                            alt="QR Code"
+                            class="mt-2 border rounded"
+                        >
                     </div>
                 @endif
 
